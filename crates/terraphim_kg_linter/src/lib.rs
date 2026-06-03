@@ -328,35 +328,34 @@ pub async fn lint_path(path: &Path) -> Result<LintReport> {
     // Scan markdown files recursively
     for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
         let p = entry.path();
-        if p.is_file() {
-            if let Some(ext) = p.extension() {
-                if ext == "md" {
-                    scanned_files += 1;
-                    match load_schema_fragments_from_markdown(p) {
-                        Ok(fr) => {
-                            fragments.commands.extend(fr.commands);
-                            for (k, v) in fr.types {
-                                if fragments.types.contains_key(&k) {
-                                    issues.push(LintIssue {
-                                        path: p.to_path_buf(),
-                                        severity: Severity::Error,
-                                        code: "types.duplicate",
-                                        message: format!("Type '{}' defined multiple times", k),
-                                    });
-                                }
-                                fragments.types.insert(k, v);
-                            }
-                            fragments.roles.extend(fr.roles);
-                        }
-                        Err(e) => {
+        if p.is_file()
+            && let Some(ext) = p.extension()
+            && ext == "md"
+        {
+            scanned_files += 1;
+            match load_schema_fragments_from_markdown(p) {
+                Ok(fr) => {
+                    fragments.commands.extend(fr.commands);
+                    for (k, v) in fr.types {
+                        if fragments.types.contains_key(&k) {
                             issues.push(LintIssue {
                                 path: p.to_path_buf(),
                                 severity: Severity::Error,
-                                code: "parse.failure",
-                                message: format!("Failed to parse schema blocks: {e}"),
+                                code: "types.duplicate",
+                                message: format!("Type '{}' defined multiple times", k),
                             });
                         }
+                        fragments.types.insert(k, v);
                     }
+                    fragments.roles.extend(fr.roles);
+                }
+                Err(e) => {
+                    issues.push(LintIssue {
+                        path: p.to_path_buf(),
+                        severity: Severity::Error,
+                        code: "parse.failure",
+                        message: format!("Failed to parse schema blocks: {e}"),
+                    });
                 }
             }
         }
