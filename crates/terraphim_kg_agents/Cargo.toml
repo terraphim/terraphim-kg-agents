@@ -29,12 +29,12 @@ uuid = { workspace = true, features = ["v4"] }
 
 
 # Terraphim dependencies
-terraphim_agent_registry = { version = "1.19.2", registry = "terraphim" }
-terraphim_agent_supervisor = { version = "1.19.2", registry = "terraphim" }
-terraphim_automata = { version = "1.20.2", registry = "terraphim" }
-terraphim_rolegraph = { version = "1.20.2", registry = "terraphim" }
-terraphim_task_decomposition = { version = "1.0.0", registry = "terraphim" }
-terraphim_types = { version = "1.20.2", registry = "terraphim" }
+terraphim_agent_registry = { version = "1.19.2" }
+terraphim_agent_supervisor = { version = "1.19.2" }
+terraphim_automata = { version = "1.20.2" }
+terraphim_rolegraph = { version = "1.20.2" }
+terraphim_task_decomposition = { version = "1.0.0" }
+terraphim_types = { version = "1.20.2" }
 
 [dev-dependencies]
 tokio-test = "0.4"
